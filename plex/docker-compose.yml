@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  plex:
+    image: plexinc/pms-docker:latest
+    environment:
+      - TZ=Australia/Brisbane
+    volumes:
+      - /home/dietpi/config:/config
+      - /media-data/movies:/data/movies
+      - /media-data/tv:/data/tv
+      - /media-data/cache:/transcode
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
+    restart: unless-stopped
+    ports:
+      - 32400:32400
