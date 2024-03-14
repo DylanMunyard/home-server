@@ -1,5 +1,5 @@
 # Create slim base VM
-Create a new VM in Proxmox by following the instructions: https://dietpi.com/docs/install/#how-to-install-dietpi
+Create a new VM in Proxmox by following the instructions: [https://dietpi.com/docs/install/#how-to-install-dietpi](https://dietpi.com/docs/install/#__tabbed_1_5)
 
 - Install docker-engine https://docs.docker.com/engine/install/debian/
 - Install and run dockage https://github.com/louislam/dockge?tab=readme-ov-file#basic
