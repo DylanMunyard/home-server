@@ -19,7 +19,7 @@ base image password: 1Password 'diet pi password'
 
 This will show up as a new lxc in Proxmox. 
 - Clone it
-- Edit the lxc conf in Proxmix (`/etc/pve/lxc/<id>.conf`
+- Edit the lxc conf in Proxmox (`/etc/pve/lxc/<id>.conf`
 - Paste this in [lxc.conf](../plex/lxc.conf)
 
 Start it then deploy Plex using Dockage with [docker-compose.yml](../plex/docker-compose.yml)
