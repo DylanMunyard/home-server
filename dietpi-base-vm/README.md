@@ -20,11 +20,11 @@ base image password: 1Password 'diet pi password'
 This will show up as a new lxc in Proxmox. 
 - Clone it
 - Edit the lxc conf in Proxmox (`/etc/pve/lxc/<id>.conf`
-- Paste this in [lxc.conf](../plex/lxc.conf)
+- Paste contents from: [lxc.conf](../plex/lxc.conf)
 
 Start it then deploy Plex using Dockage with [docker-compose.yml](../plex/docker-compose.yml)
 
 Plex requires browser on same subnet to trigger setup. Create an SSH tunnel: `ssh -L 8888:127.0.0.1:32400 192.168.1.36 -l root`, then go to localhost:8888/web. 
-- `8888` is the port binding for the SSH tunnel)
+- `8888` is the port binding for the SSH tunnel
 - `32400` is the port Plex is running on inside container
 - `192.168.1.36` is the IP of the Plex host
