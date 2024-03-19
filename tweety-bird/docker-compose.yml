@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Australia/Brisbane
+    volumes:
+      - /home/dietpi/config-sonarr:/config
+      - /media-data/tv:/tv
+      - /media-data/downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    networks:
+      - tweety
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Australia/Brisbane
+    volumes:
+      - /home/dietpi/config-radarr:/config
+      - /media-data/movies:/movies
+      - /media-data/downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    networks:
+      - tweety
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Australia/Brisbane
+    volumes:
+      - /home/dietpi/config-sabnzbd:/config
+      - /media-data/downloads:/downloads
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    networks:
+      - tweety
+
+networks:
+  tweety:
