@@ -1,5 +1,20 @@
 version: "3.8"
 services:
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Australia/Brisbane
+    volumes:
+      - /home/dietpi/config-jackett:/config
+      - /media-data/downloads:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+    networks:
+      - tweety
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
@@ -44,6 +59,25 @@ services:
       - /media-data/downloads:/downloads
     ports:
       - 8080:8080
+    restart: unless-stopped
+    networks:
+      - tweety
+  qb:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qb
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Australia/Brisbane
+      - WEBUI_PORT=8090
+      - TORRENTING_PORT=6881
+    volumes:
+      - /home/dietpi/config-qb:/config
+      - /media-data/downloads:/downloads
+    ports:
+      - 8090:8090
+      - 6881:6881
+      - 6881:6881/udp
     restart: unless-stopped
     networks:
       - tweety

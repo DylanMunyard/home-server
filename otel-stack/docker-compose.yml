@@ -1,0 +1,82 @@
+﻿version: '3.3'
+services:
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - seq_data:/data
+    networks:
+      - otel
+  
+  prometheus:
+    image: prom/prometheus:latest
+    entrypoint:
+      - /bin/prometheus
+      - --config.file=/etc/prometheus.yaml
+    ports:
+      - "9090:9090"
+    networks:
+      - otel
+    configs:
+      - source: prometheus-config
+        target: /etc/prometheus.yaml
+  
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - otel
+
+  tempo:
+    image: grafana/tempo:latest
+    command: ["-config.file=/etc/tempo-config.yaml"]
+    ports:
+      - "4317:4317"  # gRPC
+    configs:
+      - source: tempo-config
+        target: /etc/tempo-config.yaml
+    networks:
+      - otel
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    configs:
+      - source: grafana-dashboard-config
+        target: /etc/grafana/provisioning/dashboards/dashboards.yaml
+      - source: grafana-datasource-config
+        target: /etc/grafana/provisioning/datasources/datasource.yml
+    networks:
+      - otel
+
+volumes:
+  seq_data:
+
+configs:
+  grafana-dashboard-config:
+    file: ./grafana/dashboards.yaml
+  grafana-datasource-config:
+    file: ./grafana/datasource.yaml
+  tempo-config:
+    file: ./tempo/tempo.yaml
+  prometheus-config:
+    file: ./prometheus/prometheus.yaml
+
+networks:
+  otel: 
