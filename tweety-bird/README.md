@@ -1,4 +1,4 @@
-# Run OpenVPN inside container
+# Connect to VPN 
 Clone our [base container](../dietpi-base-vm/README.md)
 
 Edit lxc conf `/etc/pve/lxc` and add 
@@ -9,6 +9,11 @@ lxc.mount.entry: /dev/net dev/net none bind,create=dir
 ```
 
 ## Connecting to VPN
+Follow [These Instructions](https://github.com/hsand/pia-wg).  (`apt install git python3 python3-venv wireguard openresolv`)
+
+Then run: `systemctl enable --now wg-quick@wg0`
+
+### (OBSOLETE) Using OpenVPN
 
 Follow [PIA instructions](https://helpdesk.privateinternetaccess.com/kb/articles/linux-setting-up-manual-openvpn-connection-through-the-terminal#anchor-1) up to step 5
 - `apt-get install openvpn unzip`
