@@ -7,12 +7,16 @@ Create a RAID-Z1 ZFS pool `zpool create media-tank raidz /dev/disk/by-id/ata-ST8
 
 Creates a mount point at `/media-tank`
 
-## SSH
+## SSH CloudFlared
 Created a tunnel using `cloudflared`, https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/#connect-to-ssh-server-with-cloudflared-access
-- Installed directly on Proxmox host
-- `~/.ssh/config` on the client:
+- Install on the target (e.g. Proxmox)
+- Install on the client
+- `nano ~/.ssh/config` on the client:
 ```
 Host sshpm.munyard.dev
 ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
 ```
-**Requires cloudflared on the client. 
+## SSH Tailscale
+Tailscale creates a private virtual network (backed by WireGuard) that gives connected devices an IP address they can reach each other by. 
+
+- Install Tailscale to give the device an internet accessible IP address that is routed via the Tailscale VPN https://tailscale.com/kb/1031/install-linux
