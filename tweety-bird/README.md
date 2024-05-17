@@ -1,6 +1,4 @@
-# Connect to VPN 
-Clone our [base container](../dietpi-base-vm/README.md)
-
+# VPN 
 Edit lxc conf `/etc/pve/lxc` and add 
 
 ```
@@ -12,6 +10,9 @@ lxc.mount.entry: /dev/net dev/net none bind,create=dir
 Follow [These Instructions](https://github.com/hsand/pia-wg).  (`apt install git python3 python3-venv wireguard openresolv`)
 
 Then run: `systemctl enable --now wg-quick@wg0`
+
+# Securing Transmission UI 
+After deploying [docker-compose.yml](./docker-compose.yml) manually enter PASS=<transmission ui password> in the Dockge UI http://<ip>:5001/compose/tweety
 
 ### (OBSOLETE) Using OpenVPN
 
