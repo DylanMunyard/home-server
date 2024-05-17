@@ -88,6 +88,8 @@ services:
       - PUID=0
       - PGID=0
       - TZ=Australia/Brisbane
+      - USER=admin
+      - PASS=
     volumes:
       - /home/dietpi/config-transmission:/config
       - /media-data/downloads:/downloads
