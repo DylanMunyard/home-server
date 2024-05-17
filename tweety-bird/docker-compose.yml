@@ -62,25 +62,41 @@ services:
     restart: unless-stopped
     networks:
       - tweety
-  qb:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: qb
+  #  qb:
+  #    image: lscr.io/linuxserver/qbittorrent:latest
+  #    container_name: qb
+  #    environment:
+  #      - PUID=0
+  #      - PGID=0
+  #      - TZ=Australia/Brisbane
+  #      - WEBUI_PORT=8090
+  #      - TORRENTING_PORT=6881
+  #    volumes:
+  #      - /home/dietpi/config-qb:/config
+  #      - /media-data/downloads:/downloads
+  #    ports:
+  #      - 8090:8090
+  #      - 6881:6881
+  #      - 6881:6881/udp
+  #    restart: unless-stopped
+  #    networks:
+  #      - tweety
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
     environment:
       - PUID=0
       - PGID=0
       - TZ=Australia/Brisbane
-      - WEBUI_PORT=8090
-      - TORRENTING_PORT=6881
     volumes:
-      - /home/dietpi/config-qb:/config
+      - /home/dietpi/config-transmission:/config
       - /media-data/downloads:/downloads
     ports:
-      - 8090:8090
-      - 6881:6881
-      - 6881:6881/udp
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
     restart: unless-stopped
     networks:
       - tweety
-
 networks:
-  tweety:
+  tweety: null
