@@ -54,14 +54,17 @@ services:
       - loki
       - tempo
     environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_AUTH_DISABLE_LOGIN_FORM=true
-    configs:
-      - source: grafana-dashboard-config
-        target: /etc/grafana/provisioning/dashboards/dashboards.yaml
-      - source: grafana-datasource-config
-        target: /etc/grafana/provisioning/datasources/datasource.yml
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+    networks:
+      - otel
+  
+  influxdb:
+    image: influxdb:2
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb2
+      - ./influxdb/config:/etc/influxdb2
     networks:
       - otel
 
@@ -69,10 +72,6 @@ volumes:
   seq_data:
 
 configs:
-  grafana-dashboard-config:
-    file: ./grafana/dashboards.yaml
-  grafana-datasource-config:
-    file: ./grafana/datasource.yaml
   tempo-config:
     file: ./tempo/tempo.yaml
   prometheus-config:
