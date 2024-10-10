@@ -62,25 +62,6 @@ services:
     restart: unless-stopped
     networks:
       - tweety
-  #  qb:
-  #    image: lscr.io/linuxserver/qbittorrent:latest
-  #    container_name: qb
-  #    environment:
-  #      - PUID=0
-  #      - PGID=0
-  #      - TZ=Australia/Brisbane
-  #      - WEBUI_PORT=8090
-  #      - TORRENTING_PORT=6881
-  #    volumes:
-  #      - /home/dietpi/config-qb:/config
-  #      - /media-data/downloads:/downloads
-  #    ports:
-  #      - 8090:8090
-  #      - 6881:6881
-  #      - 6881:6881/udp
-  #    restart: unless-stopped
-  #    networks:
-  #      - tweety
   transmission:
     image: lscr.io/linuxserver/transmission:latest
     container_name: transmission
@@ -97,6 +78,34 @@ services:
       - 9091:9091
       - 51413:51413
       - 51413:51413/udp
+    restart: unless-stopped
+    networks:
+      - tweety
+  unpackerr:
+    image: golift/unpackerr
+    volumes:
+      - /media-data/downloads/complete:/downloads
+    user: 0:0
+    environment:
+      - TZ=Australia/Brisbane
+      - UN_QUIET=false
+      - UN_DEBUG=false
+      - UN_ERROR_STDERR=false
+      - UN_LOG_QUEUES=1m
+      - UN_LOG_FILES=10
+      - UN_LOG_FILE_MB=10
+      - UN_INTERVAL=2m
+      - UN_START_DELAY=1m
+      - UN_RETRY_DELAY=5m
+      - UN_MAX_RETRIES=3
+      - UN_PARALLEL=1
+      - UN_FILE_MODE=0644
+      - UN_DIR_MODE=0755
+      - UN_ACTIVITY=false
+      - UN_SONARR_0_URL=http://localhost:8989
+      - UN_SONARR_0_API_KEY=123
+      - UN_RADARR_0_URL=http://localhost:7878
+      - UN_RADARR_0_API_KEY=123
     restart: unless-stopped
     networks:
       - tweety
