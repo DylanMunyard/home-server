@@ -11,6 +11,9 @@ Follow [These Instructions](https://github.com/hsand/pia-wg).  (`apt install git
 
 Then run: `systemctl enable --now wg-quick@wg0`
 
+# Unpackerr config
+Update unpackerr's config with API Keys for Sonarr and Radarr.
+
 # Securing Transmission UI 
 After deploying [docker-compose.yml](./docker-compose.yml) manually enter PASS=<transmission ui password> in the Dockge UI http://<ip>:5001/compose/tweety
 
