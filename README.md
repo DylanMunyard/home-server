@@ -7,6 +7,11 @@ Create a RAID-Z1 ZFS pool `zpool create media-tank raidz /dev/disk/by-id/ata-ST8
 
 Creates a mount point at `/media-tank`
 
+### Add new disks 
+`zpool add media-tank raidz /dev/disk/by-id/ata-ST8000VN004-3CP101_WP01JPTQ /dev/disk/by-id/ata-ST8000VN004-3CP101_WWZ64L5F /dev/disk/by-id/ata-ST8000VN004-3CP101_WWZ669S4`
+
+- Don't format the disks before hand!
+
 ## SSH CloudFlared
 Created a tunnel using `cloudflared`, https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/#connect-to-ssh-server-with-cloudflared-access
 - Install on the target (e.g. Proxmox)
