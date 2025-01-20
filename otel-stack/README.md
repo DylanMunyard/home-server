@@ -8,7 +8,7 @@ Go to Proxmox admin UI > Datacentre > Metric Server and configure the Influx DB.
 ![Metrics Server Config](proxmox-metrics-server)
 
 Go to the Grafana UI port 3000. Add a new InfluxDB datasource
-- URL = http://<otel-ip>:8086
+- URL = http://influxdb:8086
 - Add a Custom HTTP Header: `Authorization`: `Token <paste_token>`
 - Enter `proxmox` for the database name
 
