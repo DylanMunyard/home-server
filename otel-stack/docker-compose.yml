@@ -1,52 +1,49 @@
-﻿version: '3.3'
+version: "3.3"
 services:
   seq:
     image: datalust/seq:latest
     ports:
-      - "5341:80"
+      - 5341:80
     environment:
       - ACCEPT_EULA=Y
     volumes:
       - seq_data:/data
     networks:
       - otel
-  
   prometheus:
     image: prom/prometheus:latest
     entrypoint:
       - /bin/prometheus
       - --config.file=/etc/prometheus.yaml
     ports:
-      - "9090:9090"
+      - 9090:9090
     networks:
       - otel
     configs:
       - source: prometheus-config
         target: /etc/prometheus.yaml
-  
   loki:
     image: grafana/loki:latest
     command: -config.file=/etc/loki/local-config.yaml
     ports:
-      - "3100:3100"
+      - 3100:3100
     networks:
       - otel
-
   tempo:
     image: grafana/tempo:latest
-    command: ["-config.file=/etc/tempo-config.yaml"]
+    command:
+      - -config.file=/etc/tempo-config.yaml
     ports:
-      - "4317:4317"  # gRPC
+      - 4317:4317 # gRPC
     configs:
       - source: tempo-config
         target: /etc/tempo-config.yaml
     networks:
       - otel
-
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     depends_on:
@@ -57,25 +54,21 @@ services:
       - GF_INSTALL_PLUGINS=grafana-clock-panel
     networks:
       - otel
-  
   influxdb:
     image: influxdb:2
     ports:
-      - "8086:8086"
+      - 8086:8086
     volumes:
-      - ./influxdb/data:/var/lib/influxdb2
-      - ./influxdb/config:/etc/influxdb2
+      - /media-data/lxc/otel/influxdb/data:/var/lib/influxdb2
+      - /media-data/lxc/otel/influxdb/config:/etc/influxdb2
     networks:
       - otel
-
 volumes:
-  seq_data:
-
+  seq_data: null
 configs:
   tempo-config:
     file: ./tempo/tempo.yaml
   prometheus-config:
     file: ./prometheus/prometheus.yaml
-
 networks:
-  otel: 
+  otel: null
