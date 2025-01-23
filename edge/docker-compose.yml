@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  nginx-ui:
+    stdin_open: true
+    tty: true
+    container_name: nginx-ui
+    restart: always
+    environment:
+      - TZ=Australia/Brisbane
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./nginx-ui:/etc/nginx-ui
+      - ./www:/var/www
+    ports:
+      - 8080:80
+      - 8443:443
+    image: uozi/nginx-ui:latest
