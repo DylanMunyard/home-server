@@ -5,7 +5,7 @@ services:
     environment:
       - TZ=Australia/Brisbane
     volumes:
-      - /home/dietpi/config:/config
+      - /media-data/plex-server-media:/config
       - /media-data/movies:/data/movies
       - /media-data/tv:/data/tv
       - /media-data/cache:/transcode
