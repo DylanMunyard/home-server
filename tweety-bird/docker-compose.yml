@@ -109,5 +109,17 @@ services:
     restart: unless-stopped
     networks:
       - tweety
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Australia/Brisbane
+    ports:
+      - 5055:5055
+    volumes:
+      - /media-data/lxc/overseerr:/app/config
+    restart: unless-stopped
+
 networks:
   tweety: null
