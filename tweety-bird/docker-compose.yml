@@ -70,7 +70,7 @@ services:
       - PGID=0
       - TZ=Australia/Brisbane
       - USER=admin
-      - PASS=5uea5NQNH2OqT9VEg4JJjBHvt
+      - PASS=<PASSWORD>
     volumes:
       - /media-data/config-transmission:/config
       - /media-data/downloads:/downloads
@@ -103,9 +103,9 @@ services:
       - UN_DIR_MODE=0755
       - UN_ACTIVITY=false
       - UN_SONARR_0_URL=http://sonarr:8989
-      - UN_SONARR_0_API_KEY=7bcc5fbbafc34402a2c05fe6b43bb483
+      - UN_SONARR_0_API_KEY=<API_KEY>
       - UN_RADARR_0_URL=http://radarr:7878
-      - UN_RADARR_0_API_KEY=f483632aff8d412cbcd542fa374d8d85
+      - UN_RADARR_0_API_KEY=<API_KEY>
     restart: unless-stopped
     networks:
       - tweety

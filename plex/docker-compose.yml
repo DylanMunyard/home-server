@@ -15,3 +15,14 @@ services:
     restart: unless-stopped
     ports:
       - 32400:32400
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - /media-data/lxc/tautulli:/config
+    environment:
+      - TZ=Australia/Brisbane
+    ports:
+      - 8181:8181
+networks: {}
