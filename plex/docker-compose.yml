@@ -5,7 +5,7 @@ services:
     environment:
       - TZ=Australia/Brisbane
     volumes:
-      - /home/dietpi/config:/config
+      - /media-data/plex-server-media:/config
       - /media-data/movies:/data/movies
       - /media-data/tv:/data/tv
       - /media-data/cache:/transcode
@@ -15,3 +15,14 @@ services:
     restart: unless-stopped
     ports:
       - 32400:32400
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - /media-data/lxc/tautulli:/config
+    environment:
+      - TZ=Australia/Brisbane
+    ports:
+      - 8181:8181
+networks: {}
