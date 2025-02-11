@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kraken-ui
+  namespace: kraken
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`ci.home.net`)
+    kind: Rule
+    services:
+    - name: ui
+      port: 8080
