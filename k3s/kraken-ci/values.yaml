@@ -1,4 +1,0 @@
-access:
-  # possible methods: external-ips, node-port, load-balancer
-  # default is node-port
-  method: load-balancer

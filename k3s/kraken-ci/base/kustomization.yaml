@@ -1,0 +1,9 @@
+helmCharts:
+- name: kraken-ci
+  includeCRDs: true
+  valuesInline:
+    access:
+      method: load-balancer
+  releaseName: kraken-ci
+  version: 1.7.36
+  repo: https://kraken.ci/helm-repo/charts
