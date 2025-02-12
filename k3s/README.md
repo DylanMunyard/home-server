@@ -5,13 +5,18 @@ Allows resolving the hosts defined in [ingress.yml](./ingress/ingress.yml)
 
 Install and configure dnsmasq https://wiki.archlinux.org/title/Dnsmasq
 
-edit /etc/resolv.conf:
+edit DNS resolution
 
-```conf
-# cat /etc/resolv.conf                                                                                                                                  nameserver ::1
-nameserver 127.0.0.1
-options trust-ad
+```shell
+nmcli connection modify 'Sid' ipv4.dns 127.0.0.1
+nmcli connection modify 'Sid' ipv4.dns-options trust-ad
+nmcli connection modify 'Sid' ipv4.ignore-auto-dns yes
+nmcli connection modify 'Sid' ipv6.dns ::1
+nmcli connection modify 'Sid' ipv6.dns-options trust-ad
+nmcli connection modify 'Sid' ipv6.ignore-auto-dns yes
 ```
+
+`systemctl restart NetworkManager.service`
 
 edit (uncomment / add) these options in /etc/dnsmasq.conf:
 
@@ -24,9 +29,10 @@ no-resolv
 address=/home.net/192.168.1.215 # will resolve *.home.net to k3s 
 ```
 
-Then prevent /etc/resolv.conf being overwritten by NetworkManager
-
+Don't try to disable edit on /etc/resolv.conf like is documented here: 
 https://wiki.archlinux.org/title/Domain_name_resolution#Overwriting_of_/etc/resolv.conf
+
+It will make the file uneditable by any process that wants to edit it. Caused an issue enabling my VPN. 
 
 ## Building k3s agents
 # DietPi k3s agents
