@@ -1,0 +1,119 @@
+From af20a016bec76b1cc6bf7b2d4804bf9f31a062d9 Mon Sep 17 00:00:00 2001
+From: Dylan Munyard <dmunyard@gmail.com>
+Date: Wed, 12 Feb 2025 23:14:21 +1000
+Subject: [PATCH] Adapt to Finchy's needs
+
+---
+ deployment.yaml     |  2 +-
+ namespace.yaml      |  2 +-
+ service.yaml        |  5 ++---
+ serviceAccount.yaml |  4 ++--
+ volume.yaml         | 10 +++++-----
+ 5 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/deployment.yaml b/deployment.yaml
+index 0efa08d..5b2fa29 100644
+--- a/deployment.yaml
++++ b/deployment.yaml
+@@ -2,7 +2,7 @@ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: jenkins
+-  namespace: devops-tools
++  namespace: jenkins-ci
+ spec:
+   replicas: 1
+   selector:
+diff --git a/namespace.yaml b/namespace.yaml
+index b16f0c3..c5e89dc 100644
+--- a/namespace.yaml
++++ b/namespace.yaml
+@@ -1,4 +1,4 @@
+ apiVersion: v1
+ kind: Namespace
+ metadata:
+-  name: devops-tools
++  name: jenkins-ci
+diff --git a/service.yaml b/service.yaml
+index 8a37798..195f7af 100644
+--- a/service.yaml
++++ b/service.yaml
+@@ -2,7 +2,7 @@ apiVersion: v1
+ kind: Service
+ metadata:
+   name: jenkins-service
+-  namespace: devops-tools
++  namespace: jenkins-ci
+   annotations:
+       prometheus.io/scrape: 'true'
+       prometheus.io/path:   /
+@@ -13,5 +13,4 @@ spec:
+   type: NodePort  
+   ports:
+     - port: 8080
+-      targetPort: 8080
+-      nodePort: 32000
+\ No newline at end of file
++      targetPort: 8080
+\ No newline at end of file
+diff --git a/serviceAccount.yaml b/serviceAccount.yaml
+index 75245c1..4c135cb 100644
+--- a/serviceAccount.yaml
++++ b/serviceAccount.yaml
+@@ -13,7 +13,7 @@ apiVersion: v1
+ kind: ServiceAccount
+ metadata:
+   name: jenkins-admin
+-  namespace: devops-tools
++  namespace: jenkins-ci
+ 
+ ---
+ apiVersion: rbac.authorization.k8s.io/v1
+@@ -27,4 +27,4 @@ roleRef:
+ subjects:
+ - kind: ServiceAccount
+   name: jenkins-admin
+-  namespace: devops-tools
+\ No newline at end of file
++  namespace: jenkins-ci
+\ No newline at end of file
+diff --git a/volume.yaml b/volume.yaml
+index edbaf33..9e3404e 100644
+--- a/volume.yaml
++++ b/volume.yaml
+@@ -13,10 +13,10 @@ metadata:
+   labels:
+     type: local
+ spec:
+-  storageClassName: local-storage
++  storageClassName: local-path
+   claimRef:
+     name: jenkins-pv-claim
+-    namespace: devops-tools
++    namespace: jenkins-ci
+   capacity:
+     storage: 10Gi
+   accessModes:
+@@ -30,16 +30,16 @@ spec:
+         - key: kubernetes.io/hostname
+           operator: In
+           values:
+-          - worker-node01
++          - bethany
+ 
+ ---
+ apiVersion: v1
+ kind: PersistentVolumeClaim
+ metadata:
+   name: jenkins-pv-claim
+-  namespace: devops-tools
++  namespace: jenkins-ci
+ spec:
+-  storageClassName: local-storage
++  storageClassName: local-path
+   accessModes:
+     - ReadWriteOnce
+   resources:
+-- 
+2.48.0
+
