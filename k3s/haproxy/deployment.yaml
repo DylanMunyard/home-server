@@ -21,6 +21,8 @@ spec:
         app: ha-proxy
         version: v1
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64
       serviceAccountName: ha-proxy
       initContainers:
         - name: init-cert
