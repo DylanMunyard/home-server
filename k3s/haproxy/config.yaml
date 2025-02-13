@@ -44,6 +44,8 @@ data:
       use_backend overseerr if { req.hdr(host) -i kitty.munyard.dev } 
 
       use_backend tautulli if { req.hdr(host) -i tautulli.munyard.dev } 
+
+      use_backend jenkins if { req.hdr(host) -i jenkins.munyard.dev } 
       
       # deny by default
       default_backend no-match
@@ -59,6 +61,10 @@ data:
     backend tautulli
       mode http      
       server bethany 192.168.1.36:8181 check
+
+    backend jenkins
+      mode http      
+      server bethany 192.168.1.220:32300 check
 
     backend grafana
       mode http     

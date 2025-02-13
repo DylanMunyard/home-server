@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jenkins-ui
+  namespace: jenkins-ci
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`jenkins.home.net`)
+    kind: Rule
+    services:
+    - name: jenkins-service
+      port: 8080
