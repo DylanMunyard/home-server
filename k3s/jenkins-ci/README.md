@@ -1,7 +1,15 @@
 # Jenkins CI server
-Installs Jenkins, https://www.jenkins.io/doc/book/installing/kubernetes/
+Install Jenkins, https://www.jenkins.io/doc/book/installing/kubernetes/
 
 The YAML in this folder was generated from the following steps:
 - `git clone https://github.com/scriptcamp/kubernetes-jenkins`
 - Copy [jenkins.patch](./jenkins.patch) to the `kubernetes-jenkins` repo then apply the patch: `git am jenkins.patch`
 
+## Agents
+Create an ssh agent following the guide https://www.jenkins.io/doc/book/using/using-agents/#create-a-jenkins-ssh-credential. 
+
+- Generate a SSH key pair `ssh-keygen -f ~/.ssh/jenkins_agent_key`
+- Use `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKp4ytKKw6Db/1dPaK3d9A98x33xPppLFaw7cFASp4TW dylan@dylan-arch` 
+
+### Images
+- [Python agent Dockerfile](./AgentPythonDockerfile) 
