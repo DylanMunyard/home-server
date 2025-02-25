@@ -10,8 +10,11 @@ metadata:
 spec:
   selector: 
     app: jenkins-server
-  type: NodePort  
+  type: ClusterIP  
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 32300
+      name: server
+    - port: 50000
+      targetPort: 50000
+      name: agent

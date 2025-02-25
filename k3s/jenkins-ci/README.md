@@ -11,5 +11,7 @@ Create an ssh agent following the guide https://www.jenkins.io/doc/book/using/us
 - Generate a SSH key pair `ssh-keygen -f ~/.ssh/jenkins_agent_key`
 - Use `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKp4ytKKw6Db/1dPaK3d9A98x33xPppLFaw7cFASp4TW dylan@dylan-arch` 
 
+Appy the [docker-daemon-config.yml](kubernetes-agent/docker-daemon-config.yml). It's mounted by the Jenkins Kubernetes agent pod, to allow pushing to the docker-registry [running in-cluster](../docker-registry)
+
 ### Images
 - [Python agent Dockerfile](./AgentPythonDockerfile) 

@@ -64,7 +64,7 @@ data:
 
     backend jenkins
       mode http      
-      server bethany 192.168.1.220:32300 check
+      server bethany jenkins-service.jenkins-ci:8080 check
 
     backend grafana
       mode http     

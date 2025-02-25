@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: docker-daemon-config
+  namespace: jenkins-ci
+data:
+  daemon.json: |
+    {
+      "insecure-registries": ["container-registry-service.container-registry:5000"]
+    }
