@@ -19,7 +19,7 @@ spec:
     metadata:
       labels:
         app: ha-proxy
-        version: v1
+        slowroll: 1
     spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
