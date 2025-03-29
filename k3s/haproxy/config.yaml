@@ -13,6 +13,12 @@ data:
       option forwardfor
       option http-server-close
 
+    frontend prometheus
+      bind :8405
+      mode http
+      http-request use-service prometheus-exporter
+      no log
+
     frontend k3s  
       # Set the proxy mode to http (layer 7) or tcp (layer 4)
       log global
