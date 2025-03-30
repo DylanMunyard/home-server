@@ -35,7 +35,7 @@ data:
       
       use_backend plex if { req.hdr(host) -i plex.munyard.dev }
 
-      use_backend jellyfin if { req.hdr(host) -i jb.munyard.dev }
+      use_backend jellyfin if { req.hdr(host) -i jf.munyard.dev }
       
       use_backend sab if { req.hdr(host) -i sab.munyard.dev }
       
