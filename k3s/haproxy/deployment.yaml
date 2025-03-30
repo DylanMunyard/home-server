@@ -19,7 +19,7 @@ spec:
     metadata:
       labels:
         app: ha-proxy
-        slowroll: "1"
+        slowroll: "2"
     spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
