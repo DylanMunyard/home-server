@@ -34,6 +34,8 @@ data:
       http-request set-var(txn.origin) hdr(Origin)
       
       use_backend plex if { req.hdr(host) -i plex.munyard.dev }
+
+      use_backend jellyfin if { req.hdr(host) -i jb.munyard.dev }
       
       use_backend sab if { req.hdr(host) -i sab.munyard.dev }
       
@@ -63,6 +65,10 @@ data:
     backend plex
       mode http      
       server bethany 192.168.1.36:32400 check
+
+   backend jellyfin
+      mode http      
+      server bethany 192.168.1.36:8096 check
 
     backend tautulli
       mode http      
