@@ -66,7 +66,7 @@ data:
       mode http      
       server bethany 192.168.1.36:32400 check
 
-   backend jellyfin
+    backend jellyfin
       mode http      
       server bethany 192.168.1.36:8096 check
 
