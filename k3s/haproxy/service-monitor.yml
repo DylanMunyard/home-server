@@ -7,7 +7,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: ha-proxy
+      app: metrics
   endpoints:
     - port: metrics
       path: /metrics

@@ -73,6 +73,8 @@ kind: Service
 metadata:
   name: ha-proxy-metrics
   namespace: ha-proxy
+  labels:
+    app: metrics
 spec:
   selector:
     app: ha-proxy
