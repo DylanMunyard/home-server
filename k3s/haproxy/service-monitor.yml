@@ -1,14 +1,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: ha-proxy-metrics-monitor
+  name: ha-proxy
+  labels:
+    release: kube-prometheus-stack
 spec:
   selector:
     matchLabels:
-      app: ha-proxy 
-  namespaceSelector:
-    matchNames:
-      - ha-proxy
+      app: ha-proxy
   endpoints:
     - port: metrics
       path: /metrics
