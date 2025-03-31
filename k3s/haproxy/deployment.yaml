@@ -65,9 +65,24 @@ spec:
       name: https
       protocol: TCP
       targetPort: 8443
-    - port: 61773
-      name: proxmox-ssh  
-      protocol: TCP
-      targetPort: 61773
   selector:
     app: ha-proxy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ha-proxy-metrics
+  namespace: ha-proxy
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path:   /metrics
+    prometheus.io/port:   '8405'
+spec:
+  selector:
+    app: ha-proxy
+  type: ClusterIP
+  ports:
+    - port: 8405
+      targetPort: 8405
+      name: metrics
+      
