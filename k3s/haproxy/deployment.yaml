@@ -73,10 +73,6 @@ kind: Service
 metadata:
   name: ha-proxy-metrics
   namespace: ha-proxy
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/path:   /metrics
-    prometheus.io/port:   '8405'
 spec:
   selector:
     app: ha-proxy
