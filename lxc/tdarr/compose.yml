@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  tdarr-server:
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: tdarr_server
+    environment:
+      - TZ=Australia/Brisbane
+      - inContainer=true
+      - serverPort=8266
+      - webUIPort=8265
+      - internalNode=false
+      - ffmpegVersion=7
+      - nodeName=tdarr-server
+    volumes:
+      - /media-data/lxc/tdarr-server:/app/configs
+      - /media-data:/media
+      - /media-data/lxc/tdarr-cache:/tcache
+    devices:
+      - /dev/dri:/dev/dri
+    ports:
+      - 8266:8266
+      - 8265:8265
+    restart: unless-stopped
+    networks:
+      - tdawg
+  tdarr-node:
+    image: ghcr.io/haveagitgat/tdarr_node:latest
+    container_name: tdarr_node
+    environment:
+      - TZ=Australia/Brisbane
+      - inContainer=true
+      - serverPort=8266
+      - serverIP=tdarr_server
+      - webUIPort=8265
+      - ffmpegVersion=7
+      - nodeName=tdarr-node
+    volumes:
+      - /media-data/lxc/tdarr-node:/app/configs
+      - /media-data:/media
+      - /media-data/lxc/tdarr-cache:/tcache
+    devices:
+      - /dev/dri:/dev/dri
+    ports:
+      - 8268:8268
+    restart: unless-stopped
+    networks:
+      - tdawg
+networks:
+  tdawg: null

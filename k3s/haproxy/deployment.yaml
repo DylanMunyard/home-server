@@ -14,15 +14,28 @@ spec:
   selector:
     matchLabels:
       app: ha-proxy
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
         app: ha-proxy
         slowroll: "2"
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values: [arm64, amd64]
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/arch 
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: ha-proxy
       serviceAccountName: ha-proxy
       initContainers:
         - name: init-cert
