@@ -48,7 +48,7 @@ spec:
             mountPath: /certs-output
       containers:
         - name: ha-proxy
-          image: arm64v8/haproxy
+          image: haproxy:3.1.6
           imagePullPolicy: Always
           volumeMounts:
             - name: certs-dir
