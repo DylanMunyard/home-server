@@ -56,6 +56,8 @@ data:
       use_backend jenkins if { req.hdr(host) -i jenkins.munyard.dev } 
 
       use_backend 1942 if { req.hdr(host) -i 1942.munyard.dev } 
+
+      use_backend 1942metrics if { req.hdr(host) -i 1942-metrics.munyard.dev } 
       
       # deny by default
       default_backend no-match
@@ -83,6 +85,10 @@ data:
     backend 1942
       mode http      
       server bethany bf42-servers-service.bf42-servers:80 check
+
+    backend 1942metrics
+      mode http      
+      server bethany bf42-servers-backend-service.bf42-servers:80 check
 
     backend grafana
       mode http     
