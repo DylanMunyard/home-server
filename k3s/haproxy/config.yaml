@@ -88,7 +88,7 @@ data:
       mode http      
       server bethany bf42-servers-service.bf42-servers:80 check
 
-    backend 1942
+    backend 1942metrics
       mode http      
       server bethany bf42-servers-service.bf42-servers:80 check
 
