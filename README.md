@@ -2,6 +2,33 @@
 
 Setting up Proxmox and deploying [things](./dietpi-base-vm/) to it.
 
+## DNS
+To resolve custom names within local, point router's DNS to Proxmox's IP. But **before** that, do this in Proxmox:
+- Make sure to use dnsmasq as the DNS resolver
+- Create a file `home.net.conf` inside `/etc/dnsmasq.d`. Each IP are the k3s agents. 
+```
+search home
+nameserver 1.1.1.1
+nameserver 1.0.0.1
+root@bethany:/etc/dnsmasq.d# cat home.net.conf
+# Resolve stats.home.net to multiple IPs
+address=/stats.home.net/192.168.1.220
+address=/stats.home.net/192.168.1.221
+address=/stats.home.net/192.168.1.222
+
+# Resolve argo.home.net to multiple IPs
+address=/argo.home.net/192.168.1.220
+address=/argo.home.net/192.168.1.221
+address=/argo.home.net/192.168.1.222
+
+# Resolve home.net to multiple IPs
+address=/home.net/192.168.1.220
+address=/home.net/192.168.1.221
+address=/home.net/192.168.1.222
+```
+- In the Proxmox UI -> bethany -> System -> DNS change DNS to `1.1.1.1` and `1.0.0.1`
+![dns-proxmox](dns-proxmox.png)
+
 ## Storage 
 Create a RAID-Z1 ZFS pool `zpool create media-tank raidz /dev/disk/by-id/ata-ST8000VN004-3CP101_WWZ2G9X7 /dev/disk/by-id/ata-ST8000VN004-3CP101_WWZ2GBC8 /dev/disk/by-id/ata-ST8000VN004-3CP101_WWZ4061G`
 
