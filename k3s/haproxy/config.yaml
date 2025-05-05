@@ -26,6 +26,9 @@ data:
       option  httplog
       option  dontlognull
 
+      acl host_1942 req.hdr(host) -i 1942.munyard.dev
+      acl path_api path_beg /api
+
       log-format "%ci:%cp [%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv %[capture.req.hdr(0)]"
       
       # Receive traffic via HTTPs only
@@ -55,9 +58,8 @@ data:
 
       use_backend jenkins if { req.hdr(host) -i jenkins.munyard.dev } 
 
-      use_backend 1942 if { req.hdr(host) -i 1942.munyard.dev } 
-
-      use_backend 1942metrics if { req.hdr(host) -i 1942-metrics.munyard.dev } 
+      use_backend 1942 if host_1942
+      use_backend 1942metrics if host_1942 path_api
       
       # deny by default
       default_backend no-match
@@ -86,9 +88,9 @@ data:
       mode http      
       server bethany bf42-servers-service.bf42-servers:80 check
 
-    backend 1942metrics
+    backend 1942
       mode http      
-      server bethany bf42-servers-backend-service.bf42-servers:80 check
+      server bethany bf42-servers-service.bf42-servers:80 check
 
     backend grafana
       mode http     
