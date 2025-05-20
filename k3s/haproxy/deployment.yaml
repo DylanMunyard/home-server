@@ -19,7 +19,7 @@ spec:
     metadata:
       labels:
         app: ha-proxy
-        slowroll: "4"
+        slowroll: "5"
     spec:
       affinity:
         nodeAffinity:
