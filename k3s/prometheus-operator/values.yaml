@@ -1,5 +1,15 @@
 prometheus:
   prometheusSpec:
     serviceMonitorSelector: {}
-    retention: 30d
-    retentionSize: 50GiB
+    retention: 60d
+    retentionSize: 5GiB
+
+    storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: "local-path"
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
