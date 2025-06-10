@@ -4,12 +4,12 @@ prometheus:
     retention: 60d
     retentionSize: 5GiB
 
-    storage:
-    volumeClaimTemplate:
-      spec:
-        storageClassName: "local-path"
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: "local-path"
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
