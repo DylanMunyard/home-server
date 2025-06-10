@@ -1,8 +1,8 @@
 prometheus:
   prometheusSpec:
     serviceMonitorSelector: {}
-    retention: 60d
-    retentionSize: 5GiB
+    retention: "60d"
+    retentionSize: "5GiB"
 
     storageSpec:
       volumeClaimTemplate:
