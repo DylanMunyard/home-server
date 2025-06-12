@@ -12,6 +12,54 @@ spec:
       storage: 5Gi
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clickhouse-config
+data:
+  users.xml: |
+    <clickhouse>
+      <users>
+        <default>
+          <password></password>
+          <networks>
+            <ip>::/0</ip>
+          </networks>
+          <profile>default</profile>
+          <quota>default</quota>
+          <access_management>1</access_management>
+        </default>
+      </users>
+    </clickhouse>
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clickhouse-log-config
+  namespace: clickhouse
+data:
+  log_to_console.xml: |
+    <clickhouse>
+      <logger>
+        <console>true</console>
+      </logger>
+    </clickhouse>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clickhouse-http-max-uri-size
+  namespace: clickhouse
+data:
+  http_max_uri_size.xml: |
+    <?xml version="1.0"?>
+    <clickhouse>
+        <http_server>
+            <http_max_uri_size>209715200</http_max_uri_size>
+        </http_server>
+    </clickhouse>
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,13 +80,6 @@ spec:
       containers:
         - name: clickhouse
           image: clickhouse/clickhouse-server:24.12-alpine
-          env:
-            - name: CLICKHOUSE_USER
-              value: "chuser"
-            - name: CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT
-              value: "1"
-            - name: CLICKHOUSE_PASSWORD
-              value: "chpassword"
           ports:
             - containerPort: 8123
               name: http
@@ -47,6 +88,14 @@ spec:
           volumeMounts:
             - name: stats-data
               mountPath: /var/lib/clickhouse
+            - name: config
+              mountPath: /etc/clickhouse-server/users.d/
+            - name: clickhouse-log-config
+              mountPath: /etc/clickhouse-server/config.d/log_to_console.xml
+              subPath: log_to_console.xml
+            - name: clickhouse-http-max-uri-size
+              mountPath: /etc/clickhouse-server/config.d/http_max_uri_size.xml
+              subPath: http_max_uri_size.xml
           securityContext:
             capabilities:
               add:
@@ -62,9 +111,6 @@ spec:
             httpGet:
               path: /ping
               port: 8123
-              httpHeaders:
-                - name: Authorization
-                  value: "Basic Y2h1c2VyOmNocGFzc3dvcmQ="  # base64 of chuser:chpassword
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 1
@@ -73,9 +119,6 @@ spec:
             httpGet:
               path: /ping
               port: 8123
-              httpHeaders:
-                - name: Authorization
-                  value: "Basic Y2h1c2VyOmNocGFzc3dvcmQ="  # base64 of chuser:chpassword
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 1
@@ -83,6 +126,15 @@ spec:
         - name: stats-data
           persistentVolumeClaim:
             claimName: clickhouse-pvc
+        - name: config
+          configMap:
+            name: clickhouse-config
+        - name: clickhouse-http-max-uri-size
+          configMap:
+            name: clickhouse-http-max-uri-size
+        - name: clickhouse-log-config
+          configMap:
+            name: clickhouse-log-config
 
 ---
 apiVersion: v1
