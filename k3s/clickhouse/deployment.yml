@@ -30,6 +30,11 @@ data:
           <access_management>1</access_management>
         </default>
       </users>
+      <profiles>
+        <default>
+          <http_max_uri_size>209715200</http_max_uri_size>
+        </default>
+      </profiles>
     </clickhouse>
 
 ---
@@ -44,20 +49,6 @@ data:
       <logger>
         <console>true</console>
       </logger>
-    </clickhouse>
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: clickhouse-http-max-uri-size
-  namespace: clickhouse
-data:
-  http_max_uri_size.xml: |
-    <?xml version="1.0"?>
-    <clickhouse>
-        <http_server>
-            <http_max_uri_size>209715200</http_max_uri_size>
-        </http_server>
     </clickhouse>
 ---
 apiVersion: apps/v1
@@ -93,9 +84,6 @@ spec:
             - name: clickhouse-log-config
               mountPath: /etc/clickhouse-server/config.d/log_to_console.xml
               subPath: log_to_console.xml
-            - name: clickhouse-http-max-uri-size
-              mountPath: /etc/clickhouse-server/config.d/http_max_uri_size.xml
-              subPath: http_max_uri_size.xml
           securityContext:
             capabilities:
               add:
@@ -129,9 +117,6 @@ spec:
         - name: config
           configMap:
             name: clickhouse-config
-        - name: clickhouse-http-max-uri-size
-          configMap:
-            name: clickhouse-http-max-uri-size
         - name: clickhouse-log-config
           configMap:
             name: clickhouse-log-config
