@@ -33,6 +33,7 @@ data:
       <profiles>
         <default>
           <http_max_uri_size>209715200</http_max_uri_size>
+          <max_query_size>209715200</max_query_size>
         </default>
       </profiles>
     </clickhouse>
