@@ -1,15 +1,12 @@
 ﻿auth_enabled: false
-
 server:
-  http_listen_port: 3100
-
+  http_listen_port: 3110  # Changed from 3100 to avoid conflict with Loki
 distributor:
   receivers:
     otlp:
       protocols:
         http:
         grpc:
-
 storage:
   trace:
     backend: local
