@@ -20,6 +20,7 @@ spec:
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "2Gi"
