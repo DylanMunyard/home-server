@@ -38,9 +38,9 @@ services:
     command:
       - -config.file=/etc/tempo-config.yaml
     ports:
-      - 4317:4317 # gRPC (OTLP receiver)
-      - 3200:3200  # Tempo internal port
-      - 3110:3110  # HTTP API for Grafana queries
+      - 43317:43317# gRPC (OTLP receiver)
+      - 3200:3200 # Tempo internal port
+      - 3110:3110 # HTTP API for Grafana queries
     volumes:
       - tempo_data:/var/tempo
     configs:
@@ -54,7 +54,7 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - grafana_data:/var/lib/grafana  # This persists Grafana's database and config
+      - grafana_data:/var/lib/grafana # This persists Grafana's database and config
     depends_on:
       - prometheus
       - loki
@@ -74,10 +74,10 @@ services:
       - otel
 volumes:
   seq_data: null
-  grafana_data: null  # New volume for Grafana persistence
-  prometheus_data: null  # Added for Prometheus data persistence
-  loki_data: null  # Added for Loki data persistence
-  tempo_data: null  # Added for Tempo data persistence
+  grafana_data: null # New volume for Grafana persistence
+  prometheus_data: null # Added for Prometheus data persistence
+  loki_data: null # Added for Loki data persistence
+  tempo_data: null # Added for Tempo data persistence
 configs:
   tempo-config:
     file: ./tempo/tempo.yaml
