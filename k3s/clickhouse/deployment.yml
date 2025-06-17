@@ -39,19 +39,6 @@ data:
     </clickhouse>
 
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: clickhouse-log-config
-  namespace: clickhouse
-data:
-  log_to_console.xml: |
-    <clickhouse>
-      <logger>
-        <console>true</console>
-      </logger>
-    </clickhouse>
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -82,9 +69,6 @@ spec:
               mountPath: /var/lib/clickhouse
             - name: config
               mountPath: /etc/clickhouse-server/users.d/
-            - name: clickhouse-log-config
-              mountPath: /etc/clickhouse-server/config.d/log_to_console.xml
-              subPath: log_to_console.xml
           securityContext:
             capabilities:
               add:
@@ -118,9 +102,6 @@ spec:
         - name: config
           configMap:
             name: clickhouse-config
-        - name: clickhouse-log-config
-          configMap:
-            name: clickhouse-log-config
 
 ---
 apiVersion: v1
