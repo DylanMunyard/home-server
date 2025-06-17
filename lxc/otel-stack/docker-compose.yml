@@ -38,7 +38,7 @@ services:
     command:
       - -config.file=/etc/tempo-config.yaml
     ports:
-      - 43317:43317# gRPC (OTLP receiver)
+      - 4317:43317 # gRPC (OTLP receiver)
       - 3200:3200 # Tempo internal port
       - 3110:3110 # HTTP API for Grafana queries
     volumes:
