@@ -1,0 +1,1 @@
+When you make edits to the ha-proxy manifests, keep in mind the configmap isn't automatically reloaded by the ha-proxy container, so we need to trigger a rollout. The manifests are auto-deployed by Argo, so the easiest approach is to edit the slow roll attribute inside the deployment to any value, so that the manifest changes and kubernetes will take care of rolling in new pods. 
