@@ -31,7 +31,7 @@ data:
       acl path_player_api_backend path_beg /stats
       acl path_ai_backend path_beg /ai
 
-      log-format "%ci:%cp [%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv %[capture.req.hdr(0)]"
+      log-format "%[req.hdr(CF-Connecting-IP)]\ %ci:%cp [%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv %[capture.req.hdr(0)]"
       
       # Receive traffic via HTTPs only
       bind *:8443 ssl crt /usr/local/etc/haproxy/certs/munyard-dev.pem
