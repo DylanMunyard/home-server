@@ -73,6 +73,7 @@ metadata:
   namespace: ha-proxy
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
     - port: 8443  
       name: https
