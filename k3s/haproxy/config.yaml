@@ -55,6 +55,8 @@ data:
       use_backend pm if { req.hdr(host) -i pm.munyard.dev }
       
       use_backend grafana if { req.hdr(host) -i stats.munyard.dev }
+      
+      use_backend kubepromoperator if { req.hdr(host) -i kpm.munyard.dev }
 
       use_backend overseerr if { req.hdr(host) -i kitty.munyard.dev } 
 
@@ -109,6 +111,10 @@ data:
     backend grafana
       mode http     
       server bethany 192.168.1.230:3000 check
+
+    backend kubepromoperator
+      mode http     
+      server bethany kube-prometheus-stack-grafana.monitoring:80 checka
 
     backend overseerr
       mode http     
