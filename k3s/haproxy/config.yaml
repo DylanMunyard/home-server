@@ -114,7 +114,7 @@ data:
 
     backend kubepromoperator
       mode http     
-      server bethany kube-prometheus-stack-grafana.monitoring:80 checka
+      server bethany kube-prometheus-stack-grafana.monitoring:80 check
 
     backend overseerr
       mode http     
