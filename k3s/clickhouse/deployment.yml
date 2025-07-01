@@ -76,9 +76,9 @@ spec:
                 - SYS_NICE
           resources:
             limits:
-              memory: "2Gi"
+              memory: "32Gi"
             requests:
-              memory: "1Gi"
+              memory: "16Gi"
               cpu: "500m"
           livenessProbe:
             httpGet:
