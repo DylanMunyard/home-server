@@ -44,6 +44,8 @@ kind: Deployment
 metadata:
   name: clickhouse
   namespace: clickhouse
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   replicas: 1
   selector:
@@ -76,9 +78,9 @@ spec:
                 - SYS_NICE
           resources:
             limits:
-              memory: "32Gi"
+              memory: "2Gi"
             requests:
-              memory: "16Gi"
+              memory: "1Gi"
               cpu: "500m"
           livenessProbe:
             httpGet:
