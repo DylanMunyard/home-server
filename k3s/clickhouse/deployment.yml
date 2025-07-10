@@ -41,7 +41,7 @@ data:
     <clickhouse>
       <text_log>
         <level>information</level>
-        <ttl>DELETE WHERE event_date < today() - INTERVAL 7 DAY</ttl>
+        <ttl><![CDATA[DELETE WHERE event_date < today() - INTERVAL 7 DAY]]></ttl>
       </text_log>
     </clickhouse>
 ---
