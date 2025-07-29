@@ -65,9 +65,12 @@ data:
 
       use_backend jenkins if { req.hdr(host) -i jenkins.munyard.dev } 
 
-      use_backend 1942apibackend if host_1942 or host_staging_1942 path_api_backend
-      use_backend 1942playerapibackend if host_1942 or host_staging_1942 path_player_api_backend
-      use_backend 1942aibackend if host_1942 or host_staging_1942 path_ai_backend
+      use_backend 1942apibackend if host_1942 path_api_backend
+      use_backend 1942apibackend if host_staging_1942 path_api_backend
+      use_backend 1942playerapibackend if host_1942 path_player_api_backend
+      use_backend 1942playerapibackend if host_staging_1942 path_player_api_backend
+      use_backend 1942aibackend if host_1942 path_ai_backend
+      use_backend 1942aibackend if host_staging_1942 path_ai_backend
       use_backend 1942 if host_1942
       use_backend staging1942 if host_staging_1942
       
