@@ -27,6 +27,7 @@ data:
       option  dontlognull
 
       acl host_1942 req.hdr(host) -i 1942.munyard.dev
+      acl host_staging_1942 req.hdr(host) -i staging-1942.munyard.dev
       acl path_api_backend path_beg /api
       acl path_player_api_backend path_beg /stats
       acl path_ai_backend path_beg /ai
@@ -64,10 +65,11 @@ data:
 
       use_backend jenkins if { req.hdr(host) -i jenkins.munyard.dev } 
 
-      use_backend 1942apibackend if host_1942 path_api_backend
-      use_backend 1942playerapibackend if host_1942 path_player_api_backend
-      use_backend 1942aibackend if host_1942 path_ai_backend
+      use_backend 1942apibackend if (host_1942 || host_staging_1942) path_api_backend
+      use_backend 1942playerapibackend if (host_1942 || host_staging_1942) path_player_api_backend
+      use_backend 1942aibackend if (host_1942 || host_staging_1942) path_ai_backend
       use_backend 1942 if host_1942
+      use_backend staging1942 if host_staging_1942
       
       # deny by default
       default_backend no-match
@@ -107,6 +109,10 @@ data:
     backend 1942aibackend
       mode http      
       server bethany bf42-servers-ai-backend.bf42-servers:80 check
+
+    backend staging1942
+      mode http
+      server bethany bf42-servers-feature-service.bf42-servers:80 check
 
     backend grafana
       mode http     
