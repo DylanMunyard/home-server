@@ -31,6 +31,7 @@ data:
       acl path_api_backend path_beg /api
       acl path_player_api_backend path_beg /stats
       acl path_ai_backend path_beg /ai
+      acl path_notifications path_beg /hub
 
       capture request header CF-Connecting-IP len 15
       
@@ -71,6 +72,8 @@ data:
       use_backend 1942playerapibackend if host_staging_1942 path_player_api_backend
       use_backend 1942aibackend if host_1942 path_ai_backend
       use_backend 1942aibackend if host_staging_1942 path_ai_backend
+      use_backend 1942notifications if host_1942 path_notifications
+      use_backend 1942notifications if host_staging_1942 path_notifications
       use_backend 1942 if host_1942
       use_backend staging1942 if host_staging_1942
       
@@ -112,6 +115,10 @@ data:
     backend 1942aibackend
       mode http      
       server bethany bf42-servers-ai-backend.bf42-servers:80 check
+
+    backend 1942notifications
+      mode http      
+      server bethany bf42-notifications-service.bf42-stats:8080 check
 
     backend staging1942
       mode http
