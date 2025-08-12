@@ -28,6 +28,8 @@ data:
 
       acl host_1942 req.hdr(host) -i 1942.munyard.dev
       acl host_staging_1942 req.hdr(host) -i staging-1942.munyard.dev
+      acl host_bfstats req.hdr(host) -i bfstats.io
+      acl host_staging_bfstats req.hdr(host) -i staging.bfstats.io
       acl path_api_backend path_beg /api
       acl path_player_api_backend path_beg /stats
       acl path_ai_backend path_beg /ai
@@ -68,14 +70,24 @@ data:
 
       use_backend 1942apibackend if host_1942 path_api_backend
       use_backend 1942apibackend if host_staging_1942 path_api_backend
+      use_backend 1942apibackend if host_bfstats path_api_backend
+      use_backend 1942apibackend if host_staging_bfstats path_api_backend
       use_backend 1942playerapibackend if host_1942 path_player_api_backend
       use_backend 1942playerapibackend if host_staging_1942 path_player_api_backend
+      use_backend 1942playerapibackend if host_bfstats path_player_api_backend
+      use_backend 1942playerapibackend if host_staging_bfstats path_player_api_backend
       use_backend 1942aibackend if host_1942 path_ai_backend
       use_backend 1942aibackend if host_staging_1942 path_ai_backend
+      use_backend 1942aibackend if host_bfstats path_ai_backend
+      use_backend 1942aibackend if host_staging_bfstats path_ai_backend
       use_backend 1942notifications if host_1942 path_notifications
       use_backend 1942notifications if host_staging_1942 path_notifications
+      use_backend 1942notifications if host_bfstats path_notifications
+      use_backend 1942notifications if host_staging_bfstats path_notifications
       use_backend 1942 if host_1942
       use_backend staging1942 if host_staging_1942
+      use_backend 1942 if host_bfstats
+      use_backend staging1942 if host_staging_bfstats
       
       # deny by default
       default_backend no-match
