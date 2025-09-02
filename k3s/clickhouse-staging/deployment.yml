@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: clickhouse-pvc
-  namespace: clickhouse
+  name: clickhouse-staging-pvc
+  namespace: clickhouse-staging
 spec:
   accessModes:
     - ReadWriteOnce
@@ -15,7 +15,8 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: clickhouse-config
+  name: clickhouse-staging-config
+  namespace: clickhouse-staging
 data:
   users.xml: |
     <clickhouse>
@@ -43,36 +44,24 @@ data:
         <level>information</level>
         <ttl><![CDATA[DELETE WHERE event_date < today() - INTERVAL 7 DAY]]></ttl>
       </text_log>
-      <storage_configuration>
-        <disks>
-          <backups>
-            <type>local</type>
-            <path>/backups/</path>
-          </backups>
-        </disks>
-      </storage_configuration>
-      <backups>
-        <allowed_disk>backups</allowed_disk>
-        <allowed_path>/backups/</allowed_path>
-      </backups>
     </clickhouse>
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: clickhouse
-  namespace: clickhouse
+  name: clickhouse-staging
+  namespace: clickhouse-staging
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: clickhouse
+      app: clickhouse-staging
   template:
     metadata:
       labels:
-        app: clickhouse
+        app: clickhouse-staging
     spec:
       nodeSelector:
         kubernetes.io/hostname: bethany
@@ -87,8 +76,6 @@ spec:
           volumeMounts:
             - name: stats-data
               mountPath: /var/lib/clickhouse
-            - name: backups
-              mountPath: /backups
             - name: config
               mountPath: /etc/clickhouse-server/users.d/users.xml
               subPath: users.xml
@@ -102,10 +89,10 @@ spec:
                 - SYS_NICE
           resources:
             limits:
-              memory: "32Gi"
+              memory: "16Gi"
             requests:
-              memory: "4Gi"
-              cpu: "500m"
+              memory: "2Gi"
+              cpu: "250m"
           livenessProbe:
             httpGet:
               path: /ping
@@ -124,25 +111,21 @@ spec:
       volumes:
         - name: stats-data
           persistentVolumeClaim:
-            claimName: clickhouse-pvc
-        - name: backups
-          hostPath:
-            path: /var/lib/clickhouse-backups
-            type: DirectoryOrCreate
+            claimName: clickhouse-staging-pvc
         - name: config
           configMap:
-            name: clickhouse-config
+            name: clickhouse-staging-config
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: clickhouse-service
-  namespace: clickhouse
+  name: clickhouse-staging-service
+  namespace: clickhouse-staging
 spec:
   type: ClusterIP
   selector:
-    app: clickhouse
+    app: clickhouse-staging
   ports:
     - name: http
       port: 8123
@@ -156,14 +139,14 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: clickhouse-http
-  namespace: clickhouse
+  name: clickhouse-staging-http
+  namespace: clickhouse-staging
 spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`clickhouse.home.net`)
+  - match: Host(`clickhouse-staging.home.net`)
     kind: Rule
     services:
-    - name: clickhouse-service
+    - name: clickhouse-staging-service
       port: 8123
