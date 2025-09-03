@@ -40,7 +40,6 @@ data:
           <max_bytes_before_external_group_by>4000000000</max_bytes_before_external_group_by>
           <max_bytes_before_external_sort>4000000000</max_bytes_before_external_sort>
           <max_insert_block_size>1048576</max_insert_block_size>
-          <merge_max_block_size>8192</merge_max_block_size>
         </default>
       </profiles>
       
@@ -51,6 +50,9 @@ data:
     </clickhouse>
   config.xml: |
     <clickhouse>
+      <logger>
+        <console>1</console>
+      </logger>
       <text_log>
         <level>information</level>
         <ttl><![CDATA[DELETE WHERE event_date < today() - INTERVAL 7 DAY]]></ttl>
