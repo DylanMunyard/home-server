@@ -27,16 +27,3 @@ spec:
         - name: registry-data
           persistentVolumeClaim:
             claimName: container-registry-pvc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: container-registry-pvc
-  namespace: container-registry
-spec:
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
