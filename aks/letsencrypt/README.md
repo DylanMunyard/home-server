@@ -1,3 +1,8 @@
+# Post-deployment
+Disable the Azure monitoring stack
+
+`az aks update --disable-azure-monitor-metrics -n bfstats-aks -g bfstats-io`
+
 # Issue dem certs 
 Deploy a Certificate
 
