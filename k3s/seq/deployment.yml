@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: seq
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seq
+  namespace: seq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seq
+  template:
+    metadata:
+      labels:
+        app: seq
+    spec:
+      containers:
+        - name: seq
+          image: datalust/seq:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SEQ_FIRSTRUN_NOAUTHENTICATION
+              value: "true"
+          volumeMounts:
+            - name: seq-data
+              mountPath: /data
+      volumes:
+        - name: seq-data
+          persistentVolumeClaim:
+            claimName: seq-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: seq-pvc
+  namespace: seq
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seq-service
+  namespace: seq
+  labels:
+    app: seq
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: seq-k3s
+spec:
+  selector:
+    app: seq
+  type: ClusterIP
+  ports:
+    - port: 5341
+      targetPort: 80
+      name: web
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: seq-http
+  namespace: seq
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`seq.home.net`)
+    kind: Rule
+    services:
+    - name: seq-service
+      port: 5341
