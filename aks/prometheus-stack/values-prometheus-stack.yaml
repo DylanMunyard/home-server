@@ -1,0 +1,165 @@
+# Helm values for kube-prometheus-stack
+# This replaces all the individual YAML files with a single Helm chart
+
+# Prometheus configuration
+prometheus:
+  prometheusSpec:
+    retention: 7d  # Reduced retention for cost savings
+    # Use Azure Disk storage - let it auto-create
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 10m
+      # No limits for single-node setup
+
+# Grafana configuration with Tailscale exposure
+grafana:
+  enabled: true
+  adminPassword: admin
+  # Use Azure Disk storage
+  persistence:
+    enabled: true
+    size: 2Gi
+  
+  # Fix permission issues with shared storage
+  initChownData:
+    enabled: false  # Disable the problematic init container
+  
+  # Set proper security context
+  securityContext:
+    runAsUser: 472
+    runAsGroup: 472
+    fsGroup: 472
+  
+  # Minimal resources for single-node setup
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 10m
+    # No limits for single-node setup
+  
+  # Tailscale service annotations
+  service:
+    annotations:
+      tailscale.com/expose: "true"
+      tailscale.com/hostname: grafana-aks
+  
+  # Pre-configure data sources
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      uid: loki
+      url: http://loki-gateway.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
+      jsonData:
+        maxLines: 1000
+        derivedFields:
+          - datasourceUid: tempo
+            matcherRegex: '"TraceId":"([a-fA-F0-9]+)"'
+            name: TraceID
+            url: '$${__value.raw}'
+            urlDisplayLabel: 'View Trace'
+    - name: Tempo
+      type: tempo
+      uid: tempo
+      url: http://tempo.monitoring.svc.cluster.local:3200
+      access: proxy
+      jsonData:
+        tracesToLogs:
+          datasourceUid: 'loki'
+          tags: ['job', 'instance', 'pod', 'namespace']
+          mappedTags: [{ key: 'service.name', value: 'service' }]
+          mapTagNamesEnabled: false
+          spanStartTimeShift: '1h'
+          spanEndTimeShift: '1h'
+          filterByTraceID: true
+          filterBySpanID: false
+        lokiSearch:
+          datasourceUid: 'loki'
+        serviceMap:
+          datasourceUid: 'tempo'
+        nodeGraph:
+          enabled: true
+
+# Alertmanager (optional, can be disabled)
+alertmanager:
+  enabled: true
+  alertmanagerSpec:
+    # Use Azure Disk storage - let it auto-create
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 2Gi
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 5m
+      # No limits for single-node setup
+
+# Node exporter for node metrics
+nodeExporter:
+  enabled: true
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 5m
+    # No limits for single-node setup
+
+# kube-state-metrics for Kubernetes object metrics
+kubeStateMetrics:
+  enabled: true
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 5m
+    # No limits for single-node setup
+
+# Prometheus operator
+prometheusOperator:
+  enabled: true
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 5m
+    # No limits for single-node setup
+
+# Default rules and service monitors
+defaultRules:
+  create: true
+  rules:
+    alertmanager: true
+    etcd: true
+    configReloaders: true
+    general: true
+    k8s: true
+    kubeApiserverAvailability: true
+    kubeApiserverBurnrate: true
+    kubeApiserverHistogram: true
+    kubeApiserverSlos: true
+    kubelet: true
+    kubeProxy: true
+    kubePrometheusGeneral: true
+    kubePrometheusNodeRecording: true
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    kubeScheduler: true
+    kubeStateMetrics: true
+    network: true
+    node: true
+    nodeExporterAlerting: true
+    nodeExporterRecording: true
+    prometheus: true
+    prometheusOperator: true

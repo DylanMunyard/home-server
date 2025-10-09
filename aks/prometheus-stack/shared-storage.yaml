@@ -1,0 +1,39 @@
+# Cost-optimized approach: Use node's local storage instead of Azure disks
+# This eliminates storage costs entirely but data is not persistent across node restarts
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: monitoring-hostpath-pv
+spec:
+  capacity:
+    storage: 32Gi  # Virtual capacity - uses node's local disk
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: hostpath
+  hostPath:
+    path: /tmp/monitoring-data  # Node's local storage
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: monitoring-shared-storage
+  namespace: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 32Gi
+  storageClassName: hostpath
+---
+# StorageClass for hostPath (no cost)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: hostpath
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete

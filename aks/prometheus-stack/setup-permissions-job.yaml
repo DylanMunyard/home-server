@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: setup-monitoring-permissions
+  namespace: monitoring
+spec:
+  restartPolicy: Never
+  # Run as privileged to set up directory permissions
+  hostNetwork: false
+  hostPID: false
+  containers:
+  - name: setup
+    image: busybox:latest
+    command:
+    - sh
+    - -c
+    - |
+      mkdir -p /data/loki-data/chunks /data/loki-data/wal /data/tempo-data/traces /data/tempo-data/wal
+      chown -R 10001:10001 /data
+      chmod -R 777 /data
+      ls -la /data
+      ls -la /data/tempo-data
+      echo "Permissions set successfully"
+    volumeMounts:
+    - name: hostpath-volume
+      mountPath: /data
+    securityContext:
+      runAsUser: 0
+      privileged: true
+  volumes:
+  - name: hostpath-volume
+    hostPath:
+      path: /tmp/monitoring-data
+      type: DirectoryOrCreate

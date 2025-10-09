@@ -1,0 +1,82 @@
+# Helm values for Tempo
+# Using the official Grafana Tempo Helm chart
+
+# Simplified Tempo configuration to avoid parsing errors
+tempo:
+  repository: grafana/tempo
+  tag: 2.2.0
+
+# Use Azure Disk storage - let it auto-create
+persistence:
+  enabled: true
+  size: 3Gi
+
+# Minimal resources for single-node setup
+resources:
+  requests:
+    cpu: 5m
+    memory: 64Mi
+  # No limits for single-node setup
+
+# Service configuration
+service:
+  type: ClusterIP
+
+# ServiceMonitor for Prometheus scraping
+serviceMonitor:
+  enabled: true
+  labels:
+    team: monitoring
+
+# Disable metrics generator to simplify configuration
+metricsGenerator:
+  enabled: false
+
+# Global security context for Tempo pods  
+podSecurityContext:
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+
+# Disable overrides to avoid configuration parsing errors
+config: |
+  multitenancy_enabled: false
+  usage_report:
+    reporting_enabled: false
+  compactor:
+    compaction:
+      block_retention: 168h  # 7 days to match Prometheus
+  distributor:
+    receivers:
+      jaeger:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:14250
+          thrift_binary:
+            endpoint: 0.0.0.0:6832
+          thrift_compact:
+            endpoint: 0.0.0.0:6831
+          thrift_http:
+            endpoint: 0.0.0.0:14268
+      opencensus:
+        endpoint: 0.0.0.0:55678
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      zipkin:
+        endpoint: 0.0.0.0:9411
+  ingester: {}
+  server:
+    http_listen_port: 3200
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+      wal:
+        path: /var/tempo/wal
+  querier: {}
+  query_frontend: {}

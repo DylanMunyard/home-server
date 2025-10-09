@@ -1,0 +1,120 @@
+# Helm values for Loki stack
+# Using the official Grafana Loki Helm chart
+
+# Loki configuration
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 'filesystem'
+    filesystem:
+      chunks_directory: /var/loki/chunks
+  # Add proper schema configuration with structured metadata disabled
+  schemaConfig:
+    configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+  # Disable structured metadata to work with v11 schema
+  limits_config:
+    allow_structured_metadata: false
+    retention_period: 168h  # 7 days to match Prometheus
+  # Enable trace correlation
+  query_range:
+    align_queries_with_step: true
+  # Compactor for retention enforcement
+  compactor:
+    retention_enabled: true
+    retention_delete_delay: 2h
+    delete_request_store: filesystem
+  # Disable ruler to avoid permission issues with shared storage
+  ruler:
+    enabled: false
+
+# Single binary deployment (simpler for smaller setups)
+deploymentMode: SingleBinary
+
+# Global persistence settings - disable all default PVC creation
+persistence:
+  enabled: false
+
+# Disable other deployment modes to avoid conflicts
+read:
+  replicas: 0
+write:
+  replicas: 0
+backend:
+  replicas: 0
+
+singleBinary:
+  replicas: 1
+  # Disable default persistence to prevent PVC creation
+  persistence:
+    enabled: false
+
+  # Use shared storage with custom volumes
+  extraVolumes:
+  - name: shared-storage
+    persistentVolumeClaim:
+      claimName: monitoring-shared-storage
+
+  extraVolumeMounts:
+  - name: shared-storage
+    mountPath: /var/loki
+    subPath: loki-data
+
+  # Minimal resource configuration for single-node setup
+  resources:
+    requests:
+      cpu: 5m
+      memory: 64Mi
+    # No limits for single-node setup
+
+# Global security context for Loki pods
+podSecurityContext:
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+
+# Container security context
+containerSecurityContext:
+  runAsUser: 10001
+  runAsGroup: 10001
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+
+# Gateway (for querying)
+gateway:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      cpu: 5m
+      memory: 32Mi
+    # No limits for single-node setup
+
+# Disable resource-heavy cache components for single-node setup
+resultsCache:
+  enabled: false
+chunksCache:
+  enabled: false
+
+# Disable ruler component to avoid permission issues
+ruler:
+  enabled: false
+
+# Monitoring
+monitoring:
+  serviceMonitor:
+    enabled: true
+    labels:
+      team: monitoring
+
+# Test pods (disable for production)
+test:
+  enabled: false
