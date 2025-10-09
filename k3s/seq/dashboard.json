@@ -1,0 +1,235 @@
+{
+  "OwnerId": null,
+  "Title": "Overview",
+  "IsProtected": false,
+  "SignalExpression": null,
+  "Charts": [
+    {
+      "Id": "chart-6",
+      "Title": "All Events",
+      "SignalExpression": null,
+      "Queries": [
+        {
+          "Id": "chartquery-7",
+          "Measurements": [
+            {
+              "Value": "count(*)",
+              "Label": "count"
+            }
+          ],
+          "Where": null,
+          "SignalExpression": null,
+          "GroupBy": [],
+          "DisplayStyle": {
+            "Type": "Line",
+            "LineFillToZeroY": true,
+            "LineShowMarkers": false,
+            "BarOverlaySum": false,
+            "UseLogarithmicScale": false,
+            "SuppressLegend": false,
+            "Palette": "Default"
+          },
+          "Having": null,
+          "OrderBy": [],
+          "Limit": null
+        }
+      ],
+      "DisplayStyle": {
+        "WidthColumns": 8,
+        "HeightRows": 1
+      },
+      "Description": null
+    },
+    {
+      "Id": "chart-8",
+      "Title": "Count by Level",
+      "SignalExpression": null,
+      "Queries": [
+        {
+          "Id": "chartquery-9",
+          "Measurements": [
+            {
+              "Value": "count(*)",
+              "Label": "count"
+            }
+          ],
+          "Where": null,
+          "SignalExpression": null,
+          "GroupBy": [
+            "@Level"
+          ],
+          "DisplayStyle": {
+            "Type": "Pie",
+            "LineFillToZeroY": false,
+            "LineShowMarkers": true,
+            "BarOverlaySum": false,
+            "UseLogarithmicScale": false,
+            "SuppressLegend": false,
+            "Palette": "Default"
+          },
+          "Having": null,
+          "OrderBy": [],
+          "Limit": null
+        }
+      ],
+      "DisplayStyle": {
+        "WidthColumns": 4,
+        "HeightRows": 1
+      },
+      "Description": null
+    },
+    {
+      "Id": "chart-10",
+      "Title": "Errors and Exceptions",
+      "SignalExpression": null,
+      "Queries": [
+        {
+          "Id": "chartquery-11",
+          "Measurements": [
+            {
+              "Value": "count(*)",
+              "Label": "count"
+            }
+          ],
+          "Where": "@Exception is not null or @Level in ['f', 'fa', 'fat', 'ftl', 'fata', 'fatl', 'fatal', 'c', 'cr', 'cri', 'crt', 'crit', 'critical', 'alert', 'emerg', 'panic', 'e', 'er', 'err', 'eror', 'erro', 'error'] ci",
+          "SignalExpression": null,
+          "GroupBy": [],
+          "DisplayStyle": {
+            "Type": "Bar",
+            "LineFillToZeroY": false,
+            "LineShowMarkers": true,
+            "BarOverlaySum": true,
+            "UseLogarithmicScale": false,
+            "SuppressLegend": false,
+            "Palette": "Reds"
+          },
+          "Having": null,
+          "OrderBy": [],
+          "Limit": null
+        }
+      ],
+      "DisplayStyle": {
+        "WidthColumns": 8,
+        "HeightRows": 1
+      },
+      "Description": null
+    },
+    {
+      "Id": "chart-12",
+      "Title": "Distinct Event Types",
+      "SignalExpression": null,
+      "Queries": [
+        {
+          "Id": "chartquery-13",
+          "Measurements": [
+            {
+              "Value": "count(distinct(@EventType))",
+              "Label": "count"
+            }
+          ],
+          "Where": null,
+          "SignalExpression": null,
+          "GroupBy": [],
+          "DisplayStyle": {
+            "Type": "Value",
+            "LineFillToZeroY": false,
+            "LineShowMarkers": true,
+            "BarOverlaySum": false,
+            "UseLogarithmicScale": false,
+            "SuppressLegend": false,
+            "Palette": "Default"
+          },
+          "Having": null,
+          "OrderBy": [],
+          "Limit": null
+        }
+      ],
+      "DisplayStyle": {
+        "WidthColumns": 4,
+        "HeightRows": 1
+      },
+      "Description": null
+    },
+    {
+      "Id": "chart-21",
+      "Title": "Real Users",
+      "SignalExpression": null,
+      "Queries": [
+        {
+          "Id": "chartquery-22",
+          "Measurements": [
+            {
+              "Value": "count(*)",
+              "Label": "Visits"
+            }
+          ],
+          "Where": "user_agent.original not like '%Googlebot%' and url.path like '/stats/players/%'",
+          "SignalExpression": null,
+          "GroupBy": [
+            "url.path as Player"
+          ],
+          "DisplayStyle": {
+            "Type": "Table",
+            "LineFillToZeroY": false,
+            "LineShowMarkers": true,
+            "BarOverlaySum": false,
+            "UseLogarithmicScale": false,
+            "SuppressLegend": false,
+            "Palette": "Default"
+          },
+          "Having": null,
+          "OrderBy": [],
+          "Limit": null
+        }
+      ],
+      "DisplayStyle": {
+        "WidthColumns": 6,
+        "HeightRows": 2
+      },
+      "Description": null
+    },
+    {
+      "Id": "chart-23",
+      "Title": "Google",
+      "SignalExpression": null,
+      "Queries": [
+        {
+          "Id": "chartquery-24",
+          "Measurements": [
+            {
+              "Value": "count(*)",
+              "Label": "col0"
+            }
+          ],
+          "Where": "user_agent.original like '%Googlebot%' and url.path like '/stats/players/%'",
+          "SignalExpression": null,
+          "GroupBy": [
+            "url.path"
+          ],
+          "DisplayStyle": {
+            "Type": "Table",
+            "LineFillToZeroY": false,
+            "LineShowMarkers": true,
+            "BarOverlaySum": false,
+            "UseLogarithmicScale": false,
+            "SuppressLegend": false,
+            "Palette": "Default"
+          },
+          "Having": null,
+          "OrderBy": [],
+          "Limit": null
+        }
+      ],
+      "DisplayStyle": {
+        "WidthColumns": 6,
+        "HeightRows": 2
+      },
+      "Description": null
+    }
+  ],
+  "Id": "dashboard-14",
+  "Links": {
+    "Self": "api/dashboards/dashboard-14?version=9",
+    "Group": "api/dashboards/resources"
+  }
+}
