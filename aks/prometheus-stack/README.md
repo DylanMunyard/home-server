@@ -95,7 +95,7 @@ helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack \
 - Access Grafana via Tailscale at `grafana-aks`
 - Go to Configuration > Data Sources
 - Add Loki: `http://loki-gateway.monitoring.svc.cluster.local`
-- Add Tempo: `http://tempo.monitoring.svc.cluster.local:3200`
+- Add Tempo: `http://tempo.monitoring.svc.cluster.local:3100`
 
 ## Alternative: Manual YAML Installation
 
@@ -144,7 +144,7 @@ helm list -n monitoring
 - **Grafana**: Available via Tailscale at `grafana-aks` (configured with Tailscale annotations)
 - **Prometheus**: Internal cluster access only (port-forward for debugging: `kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090`)
 - **Loki**: Internal cluster access only (port-forward for debugging: `kubectl port-forward -n monitoring svc/loki-gateway 80:80`)
-- **Tempo**: Internal cluster access only (port-forward for debugging: `kubectl port-forward -n monitoring svc/tempo 3200:3200`)
+- **Tempo**: Internal cluster access only (port-forward for debugging: `kubectl port-forward -n monitoring svc/tempo 3100:3100`)
 
 ## Default Credentials
 
@@ -154,7 +154,7 @@ helm list -n monitoring
 
 Grafana will be pre-configured with:
 - **Prometheus**: `http://prometheus-service.monitoring.svc.cluster.local:9090`
-- **Loki**: `http://loki-gateway.monitoring.svc.cluster.local`
+- **Loki**: `http://loki-service.monitoring.svc.cluster.local:3100`
 - **Tempo**: `http://tempo-service.monitoring.svc.cluster.local:3200`
 
 ## Storage (Cost-Optimized Shared Approach)

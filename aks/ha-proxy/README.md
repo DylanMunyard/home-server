@@ -1,6 +1,10 @@
 # Ingress via Cloudflare tunnel
 
-Create a tunnel
+CloudFlare has a tunnel to a [deployment running](./cloudflared-tunnel.yml) inside the cluster. 
+
+The deployment forwards all traffic to [haproxy](./deployment.yaml), which acts like a load balancer in to the cluster. 
+
+Go to [CloudFlare Tunnels](https://one.dash.cloudflare.com/eec964a0ad385fef75646d4b6b7d2f51/networks/tunnels) to see status of the link.
 
 ```bash
 # Install cloudflared locally
