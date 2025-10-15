@@ -124,6 +124,10 @@ kubeStateMetrics:
       cpu: 5m
     # No limits for single-node setup
 
+kube-state-metrics:
+  metricLabelsAllowlist:
+    - pods=[app],nodes=[kubernetes.azure.com/agentpool,kubernetes.azure.com/cluster,kubernetes.azure.com/nodepool-type]
+
 # Prometheus operator
 prometheusOperator:
   enabled: true

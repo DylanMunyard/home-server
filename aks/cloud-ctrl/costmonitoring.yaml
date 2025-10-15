@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: monitoring
+  name: metrics-exporter-job
+spec:
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  schedule: "0 */8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: metrics-exporter
+              image: dylanmunyard/metrics-exporter:latest
+              imagePullPolicy: Always
+              env:
+                - name: "Logging__LogLevel__Default"
+                  value: "Debug"
+                - name: "CloudCtrl__ClusterName"
+                  value: "bfstats-aks"
+                - name: "CloudCtrl__ApiKey"
+                  valueFrom:
+                    secretKeyRef:
+                      name: cloudctrl-credentials
+                      key: api-key
+                - name: "CloudCtrl__TenantId"
+                  value: "47758398-9ec9-4a85-9e7b-83c09efb8e71"
+                - name: "CloudCtrl__CloudAccountId"
+                  value: "4d0627a5-a2e8-4e28-b665-5ca8e2a6aa10"
+                - name: "Metrics__Host"
+                  value: "kube-prometheus-stack-prometheus"
+                - name: "Metrics__Port"
+                  value: "9090"
+          restartPolicy: OnFailure
