@@ -68,6 +68,27 @@ singleBinary:
     mountPath: /var/loki
     subPath: loki-data
 
+  # InitContainer to ensure proper directory structure and permissions
+  initContainers:
+  - name: init-loki-dirs
+    image: busybox:latest
+    command:
+    - sh
+    - -c
+    - |
+      echo "Creating required Loki directories..."
+      mkdir -p /var/loki/chunks /var/loki/wal /var/loki/rules
+      echo "Directory setup complete:"
+      ls -la /var/loki
+    volumeMounts:
+    - name: shared-storage
+      mountPath: /var/loki
+      subPath: loki-data
+    securityContext:
+      runAsUser: 10001
+      runAsGroup: 10001
+      allowPrivilegeEscalation: false
+
   # Minimal resource configuration for single-node setup
   resources:
     requests:

@@ -15,7 +15,7 @@ spec:
     - sh
     - -c
     - |
-      mkdir -p /data/loki-data/chunks /data/loki-data/wal /data/tempo-data/traces /data/tempo-data/wal
+      mkdir -p /data/loki-data/chunks /data/loki-data/wal /data/loki-data/rules /data/tempo-data/traces /data/tempo-data/wal
       chown -R 10001:10001 /data
       chmod -R 777 /data
       ls -la /data

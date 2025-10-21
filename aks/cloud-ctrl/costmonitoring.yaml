@@ -14,7 +14,7 @@ spec:
         spec:
           containers:
             - name: metrics-exporter
-              image: dylanmunyard/metrics-exporter:latest
+              image: cloudctrlofficial/metrics-exporter:latest
               imagePullPolicy: Always
               env:
                 - name: "Logging__LogLevel__Default"
