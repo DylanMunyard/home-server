@@ -26,15 +26,6 @@ data:
       option  httplog
       option  dontlognull
 
-      acl host_1942 req.hdr(host) -i 1942.munyard.dev
-      acl host_staging_1942 req.hdr(host) -i staging-1942.munyard.dev
-      acl host_bfstats req.hdr(host) -i bfstats.io
-      acl host_staging_bfstats req.hdr(host) -i staging.bfstats.io
-      acl path_api_backend path_beg /api
-      acl path_player_api_backend path_beg /stats
-      acl path_ai_backend path_beg /ai
-      acl path_notifications path_beg /hub
-
       capture request header CF-Connecting-IP len 15
       
       log-format "%[capture.req.hdr(0)]\ %ci:%cp [%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv"
@@ -67,25 +58,6 @@ data:
       use_backend tautulli if { req.hdr(host) -i tautulli.munyard.dev } 
 
       use_backend jenkins if { req.hdr(host) -i jenkins.munyard.dev } 
-
-      # Redirect 1942.munyard.dev to bfstats.io with same path
-      http-request redirect scheme https code 301 location https://bfstats.io%[capture.req.uri] if host_1942
-
-      use_backend 1942apibackend if host_staging_1942 path_api_backend
-      use_backend 1942apibackend if host_bfstats path_api_backend
-      use_backend 1942apibackend if host_staging_bfstats path_api_backend
-      use_backend 1942playerapibackend if host_staging_1942 path_player_api_backend
-      use_backend 1942playerapibackend if host_bfstats path_player_api_backend
-      use_backend 1942playerapibackend if host_staging_bfstats path_player_api_backend
-      use_backend 1942aibackend if host_staging_1942 path_ai_backend
-      use_backend 1942aibackend if host_bfstats path_ai_backend
-      use_backend 1942aibackend if host_staging_bfstats path_ai_backend
-      use_backend 1942notifications if host_staging_1942 path_notifications
-      use_backend 1942notifications if host_bfstats path_notifications
-      use_backend 1942notifications if host_staging_bfstats path_notifications
-      use_backend staging1942 if host_staging_1942
-      use_backend 1942 if host_bfstats
-      use_backend staging1942 if host_staging_bfstats
       
       # deny by default
       default_backend no-match
@@ -109,30 +81,6 @@ data:
     backend jenkins
       mode http      
       server bethany jenkins-service.jenkins-ci:8080 check
-
-    backend 1942
-      mode http      
-      server bethany bf42-servers-service.bf42-servers:80 check
-
-    backend 1942apibackend
-      mode http      
-      server bethany bf42-servers-backend-service.bf42-servers:80 check
-
-    backend 1942playerapibackend
-      mode http      
-      server bethany bf42-stats-service.bf42-stats:8080 check
-
-    backend 1942aibackend
-      mode http      
-      server bethany bf42-servers-ai-backend.bf42-servers:80 check
-
-    backend 1942notifications
-      mode http      
-      server bethany bf42-notifications-service.bf42-stats:8080 check
-
-    backend staging1942
-      mode http
-      server bethany bf42-servers-feature-service.bf42-servers:80 check
 
     backend grafana
       mode http     
