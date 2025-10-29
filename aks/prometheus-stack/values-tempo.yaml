@@ -11,6 +11,10 @@ persistence:
   enabled: true
   size: 3Gi
 
+# Node selector for non-critical workloads
+nodeSelector:
+  workload: noncritical
+
 # Minimal resources for single-node setup
 resources:
   requests:

@@ -5,6 +5,8 @@
 prometheus:
   prometheusSpec:
     retention: 7d  # Reduced retention for cost savings
+    nodeSelector:
+      workload: noncritical
     # Use Azure Disk storage - let it auto-create
     storageSpec:
       volumeClaimTemplate:
@@ -23,6 +25,8 @@ prometheus:
 grafana:
   enabled: true
   adminPassword: admin
+  nodeSelector:
+    workload: noncritical
   # Use Azure Disk storage
   persistence:
     enabled: true
@@ -92,6 +96,8 @@ grafana:
 alertmanager:
   enabled: true
   alertmanagerSpec:
+    nodeSelector:
+      workload: noncritical
     # Use Azure Disk storage - let it auto-create
     storage:
       volumeClaimTemplate:
@@ -109,6 +115,8 @@ alertmanager:
 # Node exporter for node metrics
 nodeExporter:
   enabled: true
+  nodeSelector:
+    workload: noncritical
   resources:
     requests:
       memory: 32Mi
@@ -118,6 +126,8 @@ nodeExporter:
 # kube-state-metrics for Kubernetes object metrics
 kubeStateMetrics:
   enabled: true
+  nodeSelector:
+    workload: noncritical
   resources:
     requests:
       memory: 64Mi
@@ -131,6 +141,8 @@ kube-state-metrics:
 # Prometheus operator
 prometheusOperator:
   enabled: true
+  nodeSelector:
+    workload: noncritical
   resources:
     requests:
       memory: 64Mi

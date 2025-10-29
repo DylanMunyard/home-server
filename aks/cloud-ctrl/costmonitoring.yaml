@@ -12,6 +12,8 @@ spec:
     spec:
       template:
         spec:
+          nodeSelector:
+            workload: noncritical
           containers:
             - name: metrics-exporter
               image: cloudctrlofficial/metrics-exporter:latest

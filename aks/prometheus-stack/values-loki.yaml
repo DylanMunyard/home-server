@@ -53,6 +53,8 @@ backend:
 
 singleBinary:
   replicas: 1
+  nodeSelector:
+    workload: noncritical
   # Disable default persistence to prevent PVC creation
   persistence:
     enabled: false
@@ -113,6 +115,8 @@ containerSecurityContext:
 gateway:
   enabled: true
   replicas: 1
+  nodeSelector:
+    workload: noncritical
   resources:
     requests:
       cpu: 5m

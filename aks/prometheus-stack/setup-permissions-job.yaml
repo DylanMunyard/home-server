@@ -8,6 +8,8 @@ spec:
   # Run as privileged to set up directory permissions
   hostNetwork: false
   hostPID: false
+  nodeSelector:
+    workload: noncritical
   containers:
   - name: setup
     image: busybox:latest

@@ -78,6 +78,8 @@ spec:
       labels:
         app: haproxy
     spec:
+      nodeSelector:
+        workload: noncritical
       containers:
       - name: haproxy
         image: haproxy:3.2-alpine

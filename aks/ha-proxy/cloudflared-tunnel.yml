@@ -32,6 +32,8 @@ spec:
       labels:
         app: cloudflared
     spec:
+      nodeSelector:
+        workload: noncritical
       containers:
         - name: cloudflared
           image: cloudflare/cloudflared:latest
