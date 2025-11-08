@@ -31,12 +31,17 @@ data:
       
       # ACL definitions
       acl host_staging_bfstats req.hdr(host) -i staging.bfstats.io
+      acl is_files path_beg /stats/files/
       acl is_stats path_beg /stats
       acl is_hub path_beg /hub
       
       capture request header CF-Connecting-IP len 15
       log-format "%[capture.req.hdr(0)]\ %ci:%cp [%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv"
-      
+
+      # Route /stats/files to FileBrowser (must come before general /stats rule)
+      use_backend filebrowser if is_files
+      use_backend filebrowser if host_staging_bfstats is_files
+
       # Route /stats to stats API
       use_backend stats_api if is_stats
       use_backend stats_api if host_staging_bfstats is_stats
@@ -56,6 +61,9 @@ data:
 
     backend hub_api
       server hub bf42-notifications-service.bf42-stats:8080
+
+    backend filebrowser
+      server filebrowser filebrowser-service.bf42-stats:80
 
     backend staging_frontend
       server staging bfstats-ui-service.bfstats-ui:80
