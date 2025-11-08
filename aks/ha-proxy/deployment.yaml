@@ -31,14 +31,14 @@ data:
       
       # ACL definitions
       acl host_staging_bfstats req.hdr(host) -i staging.bfstats.io
-      acl is_files path_beg /stats/files/
+      acl is_files path_beg /assets
       acl is_stats path_beg /stats
       acl is_hub path_beg /hub
       
       capture request header CF-Connecting-IP len 15
       log-format "%[capture.req.hdr(0)]\ %ci:%cp [%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r %sslv"
 
-      # Route /stats/files to FileBrowser (must come before general /stats rule)
+      # Route /assets to FileBrowser
       use_backend filebrowser if is_files
       use_backend filebrowser if host_staging_bfstats is_files
 
