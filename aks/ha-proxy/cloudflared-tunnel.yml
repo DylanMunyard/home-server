@@ -33,7 +33,7 @@ spec:
         app: cloudflared
     spec:
       nodeSelector:
-        workload: noncritical
+        workload: core
       containers:
         - name: cloudflared
           image: cloudflare/cloudflared:latest

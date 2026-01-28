@@ -6,6 +6,9 @@ The YAML in this folder was generated from the following steps:
 - Copy [jenkins.patch](./jenkins.patch) to the `kubernetes-jenkins` repo then apply the patch: `git am jenkins.patch`
 
 ## Agents
+Create a kube config file with the network IP of Bethany, take the config from `/etc/rancher/k3s/k3s.yaml` then create a 'Secret File' secret in Jenkins, and use it for the agent credentials. 
+
+### Via SSH
 Create an ssh agent following the guide https://www.jenkins.io/doc/book/using/using-agents/#create-a-jenkins-ssh-credential. 
 
 - Generate a SSH key pair `ssh-keygen -f ~/.ssh/jenkins_agent_key`
