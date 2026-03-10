@@ -22,7 +22,7 @@ spec:
                 - name: "Logging__LogLevel__Default"
                   value: "Debug"
                 - name: "CloudCtrl__ClusterName"
-                  value: "bfstats-aks"
+                  value: "aks-cluster-name-here"
                 - name: "CloudCtrl__ApiKey"
                   valueFrom:
                     secretKeyRef:
