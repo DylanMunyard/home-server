@@ -4,14 +4,17 @@ services:
     image: plexinc/pms-docker:latest
     environment:
       - TZ=Australia/Brisbane
+      - PLEX_CLAIM="claim-Dmeo9JwKHzFEurNAKXrw"
     volumes:
       - /media-data/plex-server-media:/config
       - /media-data/movies:/data/movies
       - /media-data/tv:/data/tv
       - /media-data/cache:/transcode
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128
-      - /dev/dri/card0:/dev/dri/card0
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+      - kvm
     restart: unless-stopped
     ports:
       - 32400:32400
@@ -25,4 +28,19 @@ services:
       - TZ=Australia/Brisbane
     ports:
       - 8181:8181
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - TZ=Australia/Brisbane
+    volumes:
+      - /media-data/jellyfin-config:/config
+      - /media-data/movies:/data/movies
+      - /media-data/tv:/data/tv
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
+    ports:
+      - 8096:8096
+    restart: unless-stopped
 networks: {}
